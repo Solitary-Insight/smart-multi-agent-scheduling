@@ -59,12 +59,13 @@ export function AdminStudents() {
 
   const filtered = useMemo(() => {
     return students.filter((s) => {
+      console.log('search', search)
       const matchesSearch = s.name.toLowerCase().includes(search.toLowerCase()) || s.email.toLowerCase().includes(search.toLowerCase())
       const matchesDept = deptFilter === "all" || s.department_id === deptFilter
       const matchesSem = semFilter === "all" || Number(s.semester) == Number(semFilter)
       return matchesSearch && matchesDept && matchesSem
     })
-  }, [students, deptFilter, semFilter])
+  }, [students, deptFilter, semFilter,search])
   // Logic For Pagination 
   const [currentPage, setCurrentPage] = useState(1)
   const ITEMS_PER_PAGE = 7
