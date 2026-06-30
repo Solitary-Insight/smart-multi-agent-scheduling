@@ -1,0 +1,96 @@
+SELECT CONCAT('DESCRIBE ', table_name, ';')
+FROM information_schema.tables
+WHERE table_schema = 'SMAS';
+
+
+//INFO: QUICK VERIFICATION OF CREDIT HOURS     
+SELECT 
+    c.course_name,
+    c.credit_hours,
+    COUNT(t.id) AS scheduled_slots,
+    case 
+    when c.credit_hours=scheduled_slots then "VALID"
+    when c.credit_hours<scheduled_slots then "LESS SLOTS"
+    when c.credit_hours>scheduled_slots then "MORE SLOTS" as slot_distributions 
+FROM courses c
+LEFT JOIN timetable_slots t 
+    ON t.course_id = c.id 
+    AND t.timetable_id = (SELECT MAX(id) FROM timetables)
+GROUP BY c.id, c.course_name, c.credit_hours
+ORDER BY c.id;
+
+DESCRIBE users;
+DESCRIBE students;
+DESCRIBE teachers;
+DESCRIBE teacher_departments;
+DESCRIBE student_courses;
+DESCRIBE week_days;
+DESCRIBE teacher_availability;
+DESCRIBE departments;
+DESCRIBE course_prerequisites;
+DESCRIBE courses;
+DESCRIBE classrooms;
+DESCRIBE course_merge_partners;
+DESCRIBE course_merges;
+DESCRIBE configurations;
+DESCRIBE breaks;
+DESCRIBE break_days;
+DESCRIBE break_departments;
+DESCRIBE timetables;
+DESCRIBE timetable_slots;
+DESCRIBE rescheduled_slots;
+DESCRIBE reschedule_requests;
+DESCRIBE messages;
+DESCRIBE message_recipients;
+DESCRIBE login_sessions;
+
+
+
+
+
+select * from users ;
+select * from students ;
+select * from teachers ;
+select * from teacher_departments ;
+select * from student_courses ;
+select * from week_days ;
+select * from teacher_availability ;
+select * from departments ;
+select * from course_prerequisites ;
+select * from courses ;
+select * from classrooms ;
+select * from course_merge_partners ;
+select * from course_merges ;
+select * from configurations ;
+select * from breaks ;
+select * from break_days ;
+select * from break_departments ;
+select * from reschedule_requests ;
+select * from messages ;
+select * from message_recipients ;
+select * from login_sessions ;
+
+
+
+
+select * from users limit 10;
+select * from students limit 10;
+select * from teachers limit 10;
+select * from teacher_departments limit 10;
+select * from student_courses limit 10;
+select * from week_days limit 10;
+select * from teacher_availability limit 10;
+select * from departments limit 10;
+select * from course_prerequisites limit 10;
+select * from courses limit 10;
+select * from classrooms limit 10;
+select * from course_merge_partners limit 10;
+select * from course_merges limit 10;
+select * from configurations limit 10;
+select * from breaks limit 10;
+select * from break_days limit 10;
+select * from break_departments limit 10;
+select * from reschedule_requests limit 10;
+select * from messages limit 10;
+select * from message_recipients limit 10;
+select * from login_sessions limit 10

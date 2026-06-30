@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMAS ERD Visualization with Semester Config</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --card: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #334155;
+      --accent: #60a5fa;
+      --accent2: #34d399;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, #0b1020 0%, #111827 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      padding: 32px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.8);
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      max-width: 1100px;
+    }
+
+    main {
+      max-width: 1700px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 2.1fr 0.9fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .panel h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .mermaid {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      overflow-x: auto;
+    }
+
+    .cards {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    ul {
+      margin: 8px 0 0 20px;
+      color: var(--text);
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    code.inline {
+      background: #0b1220;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      color: #c7d2fe;
+      white-space: nowrap;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(96, 165, 250, 0.12);
+      margin: 0 8px 8px 0;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .section-gap {
+      margin-top: 20px;
+    }
+
+    pre.json {
+      overflow-x: auto;
+      background: #0b1220;
+      color: #d1fae5;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 1200px) {
+
+      .grid,
+      .two-col,
+      .three-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>SMAS ERD Visualization with <code class="inline">SEMESTER_CONFIGURATIONS</code></h1>
+    <p class="sub">
+      This version keeps <code class="inline">SEMESTER_CONFIGURATIONS</code> modeled from <code
+        class="inline">configurations</code> as a structured JSON block,
+      while still showing the rest of the academic, scheduling, and relationship tables.
+    </p>
+  </header>
+
+  <main>
+    <div class="grid">
+      <section class="panel">
+        <h2>Detailed Mermaid ER Diagram</h2>
+        <div class="mermaid">
+          erDiagram
+          USERS {
+          int id PK
+          varchar name
+          varchar email UK
+          varchar password_hash
+          enum role
+          timestamp created_at
+          }
+
+          STUDENTS {
+          int user_id PK, FK
+          int department_id FK
+          int semester
+          }
+
+          TEACHERS {
+          int user_id PK, FK
+          time priority_time_start
+          time priority_time_end
+          }
+
+          DEPARTMENTS {
+          int id PK
+          varchar name
+          int head_of_department FK
+          timestamp created_at
+          varchar code UK
+          }
+
+          COURSES {
+          int id PK
+          varchar course_name
+          varchar course_code UK
+          int department_id FK
+          int teacher_id FK
+          int semester
+          int credit_hours
+          text description
+          }
+
+          STUDENT_COURSES {
+          int student_id PK, FK
+          int course_id PK, FK
+          enum status
+          }
+
+          TEACHER_DEPARTMENTS {
+          int teacher_id PK, FK
+          int department_id PK, FK
+          }
+
+          WEEK_DAYS {
+          int id PK
+          varchar name UK
+          tinyint is_holiday
+          }
+
+          TEACHER_AVAILABILITY {
+          int id PK
+          int teacher_id FK
+          int day_id FK
+          }
+
+          COURSE_PREREQUISITES {
+          int course_id PK, FK
+          int prerequisite_id PK, FK
+          }
+
+          COURSE_MERGES {
+          int id PK
+          varchar merge_name
+          }
+
+          COURSE_MERGE_PARTNERS {
+          int merge_id PK, FK
+          int course_id PK, FK
+          }
+
+          BREAKS {
+          int id PK
+          varchar label
+          time start
+          time end
+          timestamp created_at
+          }
+
+          BREAK_DAYS {
+          int break_id PK, FK
+          int day_id PK, FK
+          }
+
+          BREAK_DEPARTMENTS {
+          int break_id PK, FK
+          int department_id PK, FK
+          }
+
+          CLASSROOMS {
+          int id PK
+          varchar name
+          varchar building
+          varchar type
+          int capacity
+          text equipments
+          timestamp created_at
+          timestamp updated_at
+          }
+
+          CONFIGURATIONS {
+          int id PK
+          varchar key UK
+          longtext value
+          varchar description
+          timestamp created_at
+          timestamp updated_at
+          }
+
+          SEMESTER_CONFIGURATIONS {
+          string semesterName
+          date startDate
+          date endDate
+          int maxCredits
+          int minCredits
+          int slotDuration
+          int break_between_classes
+          time dayStart
+          time dayEnd
+          boolean allowConflicts
+          boolean autoNotify
+          boolean requireApproval
+          int maxClassSize
+          boolean enrollmentOpen
+          string weekStart
+          }
+
+          USERS ||--o| STUDENTS : "profile"
+          USERS ||--o| TEACHERS : "profile"
+
+          DEPARTMENTS ||--o{ STUDENTS : "has"
+          DEPARTMENTS ||--o{ COURSES : "offers"
+          DEPARTMENTS ||--o{ TEACHER_DEPARTMENTS : "linked"
+          TEACHERS ||--o{ TEACHER_DEPARTMENTS : "assigned"
+
+          STUDENTS ||--o{ STUDENT_COURSES : "enrolls"
+          COURSES ||--o{ STUDENT_COURSES : "contains"
+
+          TEACHERS ||--o{ TEACHER_AVAILABILITY : "available"
+          WEEK_DAYS ||--o{ TEACHER_AVAILABILITY : "used in"
+
+          COURSES ||--o{ COURSE_PREREQUISITES : "target"
+          COURSES ||--o{ COURSE_PREREQUISITES : "prereq"
+
+          COURSE_MERGES ||--o{ COURSE_MERGE_PARTNERS : "groups"
+          COURSES ||--o{ COURSE_MERGE_PARTNERS : "member"
+
+          BREAKS ||--o{ BREAK_DAYS : "applies"
+          WEEK_DAYS ||--o{ BREAK_DAYS : "day"
+
+          BREAKS ||--o{ BREAK_DEPARTMENTS : "applies"
+          DEPARTMENTS ||--o{ BREAK_DEPARTMENTS : "department"
+
+          TEACHERS ||--o{ COURSES : "teaches"
+
+          CONFIGURATIONS ||--o| SEMESTER_CONFIGURATIONS : "value JSON"
+        </div>
+        <p class="note">
+          The Mermaid diagram models <code class="inline">SEMESTER_CONFIGURATIONS</code> as a structured JSON payload
+          inside the
+          <code class="inline">configurations.value</code> field. That is the cleanest way to show the schema while
+          preserving your real storage design.
+        </p>
+      </section>
+
+      <aside class="panel">
+        <h2>What the semester JSON means</h2>
+        <div class="cards">
+          <div class="card">
+            <h3>Semester window</h3>
+            <p><code class="inline">semesterName</code>, <code class="inline">startDate</code>, and <code
+                class="inline">endDate</code> define the active term.</p>
+          </div>
+          <div class="card">
+            <h3>Credit policy</h3>
+            <p><code class="inline">maxCredits</code> and <code class="inline">minCredits</code> control enrollment
+              limits.</p>
+          </div>
+          <div class="card">
+            <h3>Schedule grid</h3>
+            <p><code class="inline">slotDuration</code>, <code class="inline">dayStart</code>, <code
+                class="inline">dayEnd</code>, and <code class="inline">break_between_classes</code> define the
+              timetable.</p>
+          </div>
+          <div class="card">
+            <h3>Workflow controls</h3>
+            <p><code class="inline">allowConflicts</code>, <code class="inline">autoNotify</code>, <code
+                class="inline">requireApproval</code>, and <code class="inline">enrollmentOpen</code> drive enforcement
+              and alerts.</p>
+          </div>
+          <div class="card">
+            <h3>Capacity rules</h3>
+            <p><code class="inline">maxClassSize</code> limits class population.</p>
+          </div>
+          <div class="card">
+            <h3>Week setup</h3>
+            <p><code class="inline">weekStart</code> stores the preferred first day of the week.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="two-col section-gap">
+      <div class="panel">
+        <h2>JSON value as stored in <code class="inline">configurations.value</code></h2>
+        <pre class="json">
+          
+          "SEMESTER_CONFIGURATIONS": {
+            "semesterName": "string",                  // Name of the semester, e.g., "Fall 2026"
+            "startDate": "date",                       // Semester start date, e.g., "2026-09-01"
+            "endDate": "date",                         // Semester end date, e.g., "2026-12-15"
+            "maxCredits": "number",                    // Maximum credits a student can take
+            "minCredits": "number",                    // Minimum credits a student must take
+            "slotDuration": "number",                  // Duration of each class slot in minutes
+            "break_between_classes": "number",         // Break duration between consecutive classes in minutes
+            "dayStart": "time",                        // Academic day start time, e.g., "08:00"
+            "dayEnd": "time",                          // Academic day end time, e.g., "18:00"
+            "allowConflicts": "boolean",               // Whether schedule conflicts are allowed
+            "autoNotify": "boolean",                   // Automatic notifications enabled
+            "requireApproval": "boolean",              // Enrollment requires approval
+            "maxClassSize": "number",                  // Maximum students per class
+            "enrollmentOpen": "boolean",               // Whether enrollment is currently open
+            "weekStart": "id(week_days)"               // References the primary key in week_days table for first day of the week
+          }
+        </pre>
+        <p class="note">This JSON is the live configuration model for the semester settings entry with key <code
+            class="inline">SEMESTER_CONFIGURATIONS</code>.</p>
+      </div>
+      <div class="panel">
+        <h2>Structural interpretation</h2>
+        <ul>
+          <li><code class="inline">configurations</code> is the parent storage table.</li>
+          <li><code class="inline">SEMESTER_CONFIGURATIONS</code> is the logical model embedded in its JSON <code
+              class="inline">value</code>.</li>
+          <li>This makes the schema flexible without needing one table column per setting.</li>
+          <li>The rest of the schema remains normalized for users, departments, courses, availability, and scheduling.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="three-col section-gap">
+      <div class="panel">
+        <h2>Core relationships</h2>
+        <ul>
+          <li><code class="inline">users</code> → <code class="inline">students</code> / <code
+              class="inline">teachers</code> as role profiles.</li>
+          <li><code class="inline">departments</code> → <code class="inline">courses</code> and <code
+              class="inline">students</code>.</li>
+          <li><code class="inline">teachers</code> → <code class="inline">courses</code> and availability tables.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>Join tables</h2>
+        <ul>
+          <li><code class="inline">teacher_departments</code></li>
+          <li><code class="inline">student_courses</code></li>
+          <li><code class="inline">course_prerequisites</code></li>
+          <li><code class="inline">course_merge_partners</code></li>
+          <li><code class="inline">break_days</code>, <code class="inline">break_departments</code></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h2>Notes to verify</h2>
+        <ul>
+          <li>Confirm whether explicit FK constraints exist in MySQL.</li>
+          <li>Confirm whether <code class="inline">head_of_department</code> references <code
+              class="inline">teachers.user_id</code> or <code class="inline">users.id</code>.</li>
+          <li>Confirm whether <code class="inline">courses.teacher_id</code> references <code
+              class="inline">teachers.user_id</code>.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      er: { useMaxWidth: true }
+    });
+  </script>
+</body>
+
+</html>
